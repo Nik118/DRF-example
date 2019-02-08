@@ -17,20 +17,32 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
 from test_app.views import (SnippetDetail, SnippetList, SnippetListMixin,
-                            UserList, UserDetail)
-# from test_app.views import UserViewSet
+                            UserList, UserDetail, SnippetDetailMixin,
+                            SnippetHighlight, UserViewSet, SnippetViewSet)
 
 router = routers.DefaultRouter()
-# router.register(r'', UserViewSet)
+router.register(r'snippets', SnippetViewSet)
+router.register(r'users', UserViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+# The API URLs are now determined automatically by the router.
 urlpatterns = [
-    # url(r'api', include(router.urls)),
-    url('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url('', include(router.urls)),
+    url('api-auth/', include('rest_framework.urls',
+        namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
-    url('snippets/', SnippetListMixin.as_view()),
-    url('snippet/(?P<pk>\d+)/$', SnippetDetail.as_view()),
-    url('users/', UserList.as_view()),
-    url('user/(?P<pk>\d+)/$', UserDetail.as_view()),
 ]
+
+
+# Additionally, we include login URLs for the browsable API.
+# urlpatterns = [
+#     url('api-auth/', include('rest_framework.urls',
+#         namespace='rest_framework')),
+#     url(r'^admin/', admin.site.urls),
+#     url('snippets/$', SnippetListMixin.as_view(), name='snippet-list'),
+#     url('snippet/(?P<pk>\d+)/$', SnippetDetailMixin.as_view(),
+#         name='snippet-detail'),
+#     url('html/(?P<pk>\d+)/$', SnippetHighlight.as_view(),
+#         name='snippet-highlight'),
+#     url('users/$', UserList.as_view(), name='user-list'),
+#     url('user/(?P<pk>\d+)/$', UserDetail.as_view(), name='user-detail'),
+# ]
