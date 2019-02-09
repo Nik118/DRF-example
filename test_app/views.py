@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 # from rest_framework import viewsets
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework import renderers
 from rest_framework import status
@@ -13,16 +14,6 @@ from rest_framework.views import APIView
 from test_app.permissions import IsOwnerOrReadOnly
 from .models import Snippet
 from .serializers import SnippetSerializer, UserSerializer
-
-# from test_app.serializers import UserSerializer
-#
-#
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = User.objects.all().order_by('-date_joined')
-#     serializer_class = UserSerializer
 
 
 class SnippetList(APIView):
@@ -137,6 +128,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
     Additionally we also provide an extra highlight action.
     """
     queryset = Snippet.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('id', )
     serializer_class = SnippetSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
